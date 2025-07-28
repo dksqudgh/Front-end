@@ -111,6 +111,15 @@ export const GoogleButton = styled(SubmitButton)`
   &:hover { background-color: lightgray }
 `; 
 
+export const KakaoButton = styled(SubmitButton)`
+  margin-top: 0px;
+  background-color: #FEE500;
+  font-weight: bold;
+  border: 1px solid #dddddd;
+  color: black;
+  &:hover { background-color: lightgray }
+`; 
+
 export const MyButton = styled.button`
   margin-top:10px;
   margin-bottom: 40px; 
@@ -197,6 +206,15 @@ margin-bottom:10px;
 export const QnACommentArea = styled.textarea`
 width:100%;
 height:100px;
+resize:none;
+border:1px solid lightgray;
+border-radius:10px;
+padding:5px;
+`
+
+export const CommentArea = styled.textarea`
+width:100%;
+height:200px;
 resize:none;
 border:1px solid lightgray;
 border-radius:10px;

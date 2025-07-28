@@ -1,0 +1,89 @@
+import React, { useEffect, useState } from 'react'
+import Header from '../include/Header'
+import Footer from '../include/Footer'
+import { Button, Card, ListGroup } from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'
+import { empDetailDB } from '../../service/empService'
+//EmpDetail페이지는 오라클 서버를 먼저 경유한다.
+//
+const EmpDetail = () => {
+  //-> http://localhost:3000/empDetail/:p_empno
+  //-> http://localhost:3000/empDetail/7566
+  //p_empno는 오라클 DB에서 가져오는 값이 아니다.
+  const { p_empno } = useParams() //7566사원번호가 달라진다.
+  console.log(p_empno);
+  const [emp, setEmp] = useState({
+    empno: 0,
+    ename: '',
+    job: '',
+    mgr: 0,
+    hiredate: '',
+    sal: 0,
+    comm: 0,
+    deptno: 0,
+    ephoto:''
+  })
+  //사원목록에서 사원명을 클릭하면 Link태그를 호출함 - PathVariable 사원번호를 붙임
+  //useParams - 이름앞에 use가 붙어있는 것들은 모두 HOOK이다.
+  //DB연동을 사원번호가 변경되었을 때만 오라클 경유한다.
+  useEffect(() => {
+    console.log('useEffect');
+    const asyncDB = async() => {
+      const res = await empDetailDB({empno: p_empno})
+      console.log(res.data);
+      //console.log(""+res.data);//[object Object]
+      const result = JSON.stringify(res.data)
+      const jsonDoc = JSON.parse(result)
+      setEmp({empno:jsonDoc[0].EMPNO, ename:jsonDoc[0].ENAME, job:jsonDoc[0].JOB
+        ,mgr:jsonDoc[0].MGR, hiredate: jsonDoc[0].HIREDATE, sal: jsonDoc[0].SAL
+        ,comm:jsonDoc[0].COMM, deptno: jsonDoc[0].DEPTNO, ephoto: jsonDoc[0].EPHOTO
+      })
+    }
+    asyncDB()
+  },[p_empno]) //useMemo, useCallback
+  const handleShow = () => {
+
+  }
+  const empDelete = () => {
+
+  }
+  return (
+    <>
+      <Header />
+      <div className="container">
+        <div className="page-header">
+          <h2>사원관리 <small>사원상세</small></h2>
+          <hr />
+        </div>
+        <Card style={{ width: '58rem' }}>
+          <ListGroup variant="flush">
+            <ListGroup.Item>사원번호 : {emp.empno}</ListGroup.Item>
+            <ListGroup.Item>사원명 : {emp.ename}</ListGroup.Item>
+            <ListGroup.Item>JOB : {emp.job}</ListGroup.Item>
+            <ListGroup.Item>MGR : {emp.mgr}</ListGroup.Item>
+            <ListGroup.Item>입사일자 : {emp.hiredate}</ListGroup.Item>
+            <ListGroup.Item>급여 : {emp.sal}</ListGroup.Item>
+            <ListGroup.Item>인센티브 : {emp.comm}</ListGroup.Item>
+            <ListGroup.Item>부서번호 : {emp.deptno}</ListGroup.Item>
+            <ListGroup.Item>사진 : {emp.ephoto}</ListGroup.Item>
+          </ListGroup>
+          <div className='detail-link'>
+            <Button variant="success" onClick={handleShow}>
+              수정
+            </Button>
+            &nbsp;
+            <Button variant="danger" onClick={empDelete}>
+              삭제
+            </Button>
+            &nbsp;
+            <Link to="/emp" className='nav-link'>사원목록</Link>
+          </div>
+        </Card>   
+        <hr />
+      </div>      
+      <Footer />
+    </>
+  )
+}
+
+export default EmpDetail

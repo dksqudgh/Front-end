@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom'
+import '../css/myStyle.css'
 import { useState } from 'react'
 import { oracleLogin } from '../../service/dbLogic'
-import Header from '../include/Header'
-import Footer from '../include/Footer'
-import '../../css/myStyle.css'
 
 const LoginForm = () => {
   const navigate = useNavigate()
@@ -34,9 +32,8 @@ const LoginForm = () => {
     navigate("/")
   }
   return (
-  <>
+    <>
     {/* jsx주석이다. */}
-    <Header />
       <div className="box">
         <p>&nbsp; &nbsp;아이디 :
             <input type="text" name="id" id="userid" onChange={(event)=>{handleId(event.target.value)}} /></p>
@@ -45,9 +42,7 @@ const LoginForm = () => {
         &nbsp;&nbsp;
         <button type="button" id="btnEnroll" onClick={signup}>회원가입</button>
       </div>
-    <Footer />
-  </>
+    </>
   )
 }
-
 export default LoginForm

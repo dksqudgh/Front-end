@@ -1,0 +1,64 @@
+import React, { useEffect, useState } from 'react'
+import TestRow from './TestRow'
+import { useNavigate } from 'react-router-dom';
+import { testListDB } from '../../service/testService';
+
+const TestList = () => {
+  console.log('render');
+  const navigate = useNavigate()
+  const [refresh, setRefresh] = useState(0)
+  const [gubun, setGubun] = useState('')//t_title, t_content, t_writer
+  const [keyword, setKeyword] = useState('')//사용자가 입력한 문자열
+  const [tests, setTests] = useState([])
+  useEffect(()=>{
+    console.log('effect');
+    const test = {
+      gubun: null,
+      keyword: null
+    }
+    //오라클 서버 경유
+    const asyncDB = async() => {
+      const res = await testListDB(test);
+      console.log(res.data);
+      setTests(res.data)
+    }
+    asyncDB()
+  },[])
+  return (
+    <>
+      <div className='container'>
+        <div className='page-header'>
+          <h2>테스트관리<small>테스트목록</small></h2>
+          <hr />
+        </div>
+        <div className='test-list'>
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+              </tr>
+            </thead>
+            {/* 데이터셋 연동하기 */}
+            {/* props로 넘어온 상태값이 빈 깡통이면 실행하지 않기 */}
+            <tbody>
+            {tests && Object.keys(tests).map(key => (
+              <TestRow key={key} test={tests[key]} />
+            ))}
+            </tbody>
+            {/* 데이터셋 연동하기 */}
+          </table>
+          <hr />
+          <div className='list-footer'>
+          <button className="btn btn-warning" onClick={()=> console.log('전체조회')}>전체조회</button>
+          &nbsp;
+          <button  className="btn btn-success" onClick={()=> navigate("/test/write")}>글쓰기</button>
+          </div>  
+        </div>      
+      </div>    
+    </>
+  )
+}
+
+export default TestList

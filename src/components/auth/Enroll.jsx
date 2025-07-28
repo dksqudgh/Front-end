@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { memberInsertDB } from '../../service/dbLogic'
+import '../css/myStyle.css'
 import { useNavigate } from 'react-router-dom'
 
 const Enroll = () => {
@@ -22,7 +23,7 @@ const Enroll = () => {
     setEmail(value)
   }  
   const mainMove = () => {
-    navigate('/home')
+    navigate('/index')
   }
   const memberInsert = async() => {
     const member = {
@@ -33,7 +34,7 @@ const Enroll = () => {
     }
     const res = await memberInsertDB(member)
     console.log(res);//1:입력성공, 0:입력실패
-    navigate('/home')
+    navigate('/index')
   }
   return (
     <>
